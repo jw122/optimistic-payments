@@ -10,7 +10,7 @@ export default function InfoModal() {
   return (
     <>
       <Button className="nextButton" onClick={handleShow}>
-        Open Modal
+        Checkout
       </Button>
 
       <Modal show={show} onHide={handleClose}>
