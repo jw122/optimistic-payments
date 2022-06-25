@@ -3,37 +3,48 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
-import { ethers } from "ethers";
 import Web3Modal from "web3modal";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import BuyModal from "../components/BuyModal";
+import { ethers } from "ethers";
+
+
+
 
 export default function Home() {
+
+  const [ethersProvider, setEthersProvider] = React.useState(null);
+  const [connectedAccounts, setConnectedAccounts] = React.useState([]);
+
+  async function checkWalletConnection() {
+    if (!window.ethereum) {
+      console.error("Metamask not initialized.")
+      setEthersProvider(null);
+      return;
+    }
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const accounts = await provider.listAccounts();
+
+    if (accounts.length === 0) {
+      console.error("no connected accounts");
+      setEthersProvider(null);
+      return;
+    }
+
+    setEthersProvider(provider);
+    setConnectedAccounts(accounts);
+  }
+
   useEffect(() => {
     checkWalletConnection();
   });
-
-  async function checkWalletConnection() {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-    console.log("provider: ", provider);
-    const accounts = await provider.listAccounts();
-    console.log("current accounts: ", accounts);
-
-    if (accounts.length === 0) {
-      console.log("no connected accounts");
-    }
-  }
 
   async function connectWallet() {
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
     console.log("wallet connected! ", connection);
     checkWalletConnection();
-  }
-
-  async function buyModal() {
-    console.log("clicked on buyModal");
   }
 
   return (
@@ -46,30 +57,30 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Welcome to Optimistic Cafe</h1>
+        {ethersProvider && connectedAccounts.length == 0 &&
+          <div className="top-nav">
+            <Button
+              onClick={connectWallet}
+              className="connect-btn"
+              variant="warning"
+            >
+              🔌 Connect wallet
+            </Button>
+          </div>
+        }
 
-        <div className="top-nav">
-          <Button
-            onClick={connectWallet}
-            className="connect-btn"
-            variant="warning"
-          >
-            🔌 Connect wallet
-          </Button>
-        </div>
-
-        <div className={styles.grid}>
+        {ethersProvider && connectedAccounts > 0 &&
+        (<div className={styles.grid}>
           <a className={styles.card}>
             <img
               src="https://cdn2.iconfinder.com/data/icons/coffee-19/442/tea-1024.png"
               style={{ width: "50px" }}
             ></img>
             <h4>5 USDC</h4>
-            {/* <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p> */}
-            <BuyModal></BuyModal>
+            <BuyModal/>
           </a>
-        </div>
+        </div>)
+        }
       </main>
 
       <footer className={styles.footer}>
