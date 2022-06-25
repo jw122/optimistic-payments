@@ -19,7 +19,7 @@ export async function checkWalletConnection() {
     console.error("no connected accounts");
     return {providers: null, accounts: []};
   }
-
+  
   return {
     provider: provider,
     accounts: accounts
