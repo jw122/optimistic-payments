@@ -12,7 +12,6 @@ function TokenSelect({provider, accountAddress}) {
 
   const search = async (token, amount) => {
     console.log("searching for quote for " + token + " , amount " + amount);
-
     let swapQuery = await fetch(
       `api/quote?sellToken=${token}&buyToken=USDC&amount=${amount}`
     );
@@ -43,11 +42,18 @@ function TokenSelect({provider, accountAddress}) {
     }
   });
 
+  const hasAnyNonzeroCurrency = balances && !!Object.keys(balances).find(currency => {
+    balances[currency] > 0
+  });
+  const paymentDisabled = !hasAnyNonzeroCurrency;
+
+
   return (
-    <Dropdown>
-      <Dropdown.Toggle variant="success" id="dropdown-basic">
+    <Dropdown disabled={paymentDisabled}>
+      <Dropdown.Toggle disabled={paymentDisabled} variant="success" id="dropdown-basic">
         Select a token to pay
       </Dropdown.Toggle>
+      {paymentDisabled && <p>You don't have any tokens :(</p>}
 
       <Dropdown.Menu>
         {currencies.filter((currency) =>

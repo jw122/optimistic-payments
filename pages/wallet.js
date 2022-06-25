@@ -34,6 +34,7 @@ export async function checkWalletConnection() {
 }
 
 export async function connectWallet() {
+  console.log("Connect wallet");
   const web3Modal = new Web3Modal({
     network: "testnet",
     cacheProvider: true, // optional
