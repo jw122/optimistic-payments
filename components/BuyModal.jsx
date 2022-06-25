@@ -18,7 +18,7 @@ export default function InfoModal() {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Woohoo, you're reading this text in a modal!
+          Amount: 5 USDC
           <TokenSelect></TokenSelect>
         </Modal.Body>
 

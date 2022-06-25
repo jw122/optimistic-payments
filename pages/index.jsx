@@ -64,9 +64,7 @@ export default function Home() {
               style={{ width: "50px" }}
             ></img>
             <h4>5 USDC</h4>
-            {/* <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p> */}
+
             <BuyModal></BuyModal>
           </a>
         </div>
