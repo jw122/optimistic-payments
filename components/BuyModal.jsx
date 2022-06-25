@@ -3,11 +3,10 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import TokenSelect from "./TokenSelect";
 
-export default function InfoModal() {
+export default function InfoModal({provider, accountAddress}) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-    //const [selectedPrice, setSelectedPrice] = React.useState("selectedPrice");
   const selectedPrice = localStorage.getItem("selectedPrice");
   return (
     <>
@@ -17,11 +16,11 @@ export default function InfoModal() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Checkout</Modal.Title>
+          <Modal.Title>How would you like to pay?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           Amount: {selectedPrice} USDC
-          <TokenSelect></TokenSelect>
+          <TokenSelect provider={provider} accountAddress={accountAddress} />
         </Modal.Body>
 
         <Modal.Footer>

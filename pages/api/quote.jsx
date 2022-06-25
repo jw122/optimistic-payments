@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const axiosInstance = axios.create({
-    baseURL: 'https://optimism.api.0x.org/',
+    baseURL: 'https://ropsten.api.0x.org/',
     timeout: 1000,
   });
 

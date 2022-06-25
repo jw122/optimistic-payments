@@ -42,7 +42,7 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={styles.title}>Welcome to Optimistic Cafe</h1>
         <div>{walletAddress}</div>
-        
+
         {connectedAccounts.length == 0 && (
           <div className="top-nav">
             <Button
@@ -69,7 +69,7 @@ export default function Home() {
               ></img>
               <h4>{coffeePrice} USDC</h4>
 
-              <BuyModal></BuyModal>
+              <BuyModal provider={ethersProvider} accountAddress={connectedAccounts[0]}/>
             </a>
           </div>
         )}
