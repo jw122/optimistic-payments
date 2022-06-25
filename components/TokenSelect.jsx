@@ -1,5 +1,4 @@
 import Dropdown from "react-bootstrap/Dropdown";
-import { getTokenBalance } from "../pages/wallet.js";
 import React from "react";
 import { sendUSDC, swapForUSDC, getTokenBalance, checkWalletConnection } from '../pages/wallet'
 
