@@ -31,7 +31,7 @@ export default function Home() {
 
   console.log("Render: Home");
 
-  const coffeePrice = 4;
+  const coffeePrice = 500;
 
   return (
     <div className={styles.container}>
