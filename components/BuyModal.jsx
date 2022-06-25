@@ -7,6 +7,8 @@ export default function InfoModal() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+    //const [selectedPrice, setSelectedPrice] = React.useState("selectedPrice");
+  const selectedPrice = localStorage.getItem("selectedPrice");
   return (
     <>
       <Button className="nextButton" onClick={handleShow}>
@@ -15,19 +17,19 @@ export default function InfoModal() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Checkout</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Amount: 5 USDC
+          Amount: {selectedPrice} USDC
           <TokenSelect></TokenSelect>
         </Modal.Body>
 
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            Cancel
           </Button>
           <Button variant="primary" onClick={handleClose}>
-            Save Changes
+            Purchase
           </Button>
         </Modal.Footer>
       </Modal>

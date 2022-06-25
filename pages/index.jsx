@@ -4,16 +4,18 @@ import styles from "../styles/Home.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
 import Web3Modal from "web3modal";
-import React, { useEffect } from "react";
+import React, { useEffect, setState} from "react";
 import BuyModal from "../components/BuyModal";
 import { ethers } from "ethers";
 
 import { checkWalletConnection, connectWallet, sendUSDC } from "./wallet.js";
 
+
 export default function Home() {
   const [ethersProvider, setEthersProvider] = React.useState(null);
   const [connectedAccounts, setConnectedAccounts] = React.useState([]);
-  const [walletAddress, setWalletAddress] = React.useState("walletAddress")
+  const [walletAddress, setWalletAddress] = React.useState("walletAddress");
+  const [selectedPrice, setSelectedPrice] = React.useState("selectedPrice");
 
   useEffect(() => {
     checkWalletConnection().then((res) => {
@@ -26,6 +28,8 @@ export default function Home() {
       }
     });
   });
+
+  const coffeePrice = 4;
 
   return (
     <div className={styles.container}>
@@ -58,12 +62,12 @@ export default function Home() {
 
         {ethersProvider && connectedAccounts > 0 && (
           <div className={styles.grid}>
-            <a className={styles.card}>
+              <a className={styles.card} onClick={() => { localStorage.setItem("selectedPrice", coffeePrice); }}>
               <img
                 src="https://cdn2.iconfinder.com/data/icons/coffee-19/442/tea-1024.png"
                 style={{ width: "50px" }}
               ></img>
-              <h4>5 USDC</h4>
+              <h4>{coffeePrice} USDC</h4>
 
               <BuyModal></BuyModal>
             </a>

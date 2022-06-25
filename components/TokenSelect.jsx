@@ -6,7 +6,8 @@ function TokenSelect() {
   const handleClick = (event) => {
     console.log("clicked on dropdown!", event.target.textContent);
     const token = event.target.textContent;
-    search(token, 10);
+    const selectedPrice = localStorage.getItem("selectedPrice");
+    search(token, selectedPrice);
   };
 
   const search = async (token, amount) => {
