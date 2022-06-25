@@ -19,7 +19,7 @@ export async function checkWalletConnection() {
     console.error("no connected accounts");
     return {providers: null, accounts: []};
   }
-
+  
   return {
     provider: provider,
     accounts: accounts
@@ -48,8 +48,20 @@ export async function sendUSDC(provider, to_address, amount) {
     ERC20_ABI,
     signer
   );
-  // Send tokens
   return contract.transfer(to_address, amount).then((transferResult) => {
     return transferResult
   })
+}
+
+/**
+ * Get an ERC20 token balance.
+ */
+export async function getTokenBalance(provider, contractAddress, account) {
+  const signer = provider.getSigner()
+  const contract = new ethers.Contract(
+    contractAddress,
+    ERC20_ABI,
+    signer
+  );
+  return await contract.balanceOf(account);
 }

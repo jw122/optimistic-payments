@@ -13,11 +13,17 @@ import { checkWalletConnection, connectWallet, sendUSDC } from "./wallet.js";
 export default function Home() {
   const [ethersProvider, setEthersProvider] = React.useState(null);
   const [connectedAccounts, setConnectedAccounts] = React.useState([]);
+  const [walletAddress, setWalletAddress] = React.useState("walletAddress")
 
   useEffect(() => {
     checkWalletConnection().then((res) => {
       setEthersProvider(res.provider);
       setConnectedAccounts(res.accounts);
+      if (res.accounts.length > 0) {
+        setWalletAddress("Connected to wallet " + res.accounts[0] + "! :)");
+      } else {
+        setWalletAddress("Wallet not connected! :(")
+      }
     });
   });
 
@@ -31,6 +37,8 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Welcome to Optimistic Cafe</h1>
+        <div>{walletAddress}</div>
+        
         {connectedAccounts.length == 0 && (
           <div className="top-nav">
             <Button
