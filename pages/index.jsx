@@ -7,7 +7,8 @@ import Web3Modal from "web3modal";
 import React, { useEffect } from "react";
 import BuyModal from "../components/BuyModal";
 import { ethers } from "ethers";
-import { checkWalletConnection, connectWallet } from "./wallet.js";
+
+import { checkWalletConnection, connectWallet, sendUSDC } from "./wallet.js";
 
 export default function Home() {
   const [ethersProvider, setEthersProvider] = React.useState(null);
