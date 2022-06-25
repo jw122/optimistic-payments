@@ -37,6 +37,15 @@ export async function connectWallet() {
   return await checkWalletConnection();
 }
 
+
+/**
+ * Swap input token to USDC
+ */
+export async function swapForUSDC(provider, txObject) {
+  const signer = provider.getSigner();
+  signer.sendTransaction(txObject);
+}
+
 /**
  * Send a certain `amount` of USDC to `to_address`.
  */
