@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 export async function checkWalletConnection() {
   if (!window.ethereum) {
     console.error("Metamask not initialized.")
-    return {};
+    return {providers: null, accounts: []};
   }
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -13,7 +13,7 @@ export async function checkWalletConnection() {
 
   if (accounts.length === 0) {
     console.error("no connected accounts");
-    return {};
+    return {providers: null, accounts: []};
   }
 
   return {
@@ -27,4 +27,8 @@ export async function connectWallet() {
   const connection = await web3Modal.connect();
   console.log("wallet connected! ", connection);
   return await checkWalletConnection();
+}
+
+export async function sendUSD(provider, amount) {
+  // TODO: implement using provider.sendToken(..)
 }
