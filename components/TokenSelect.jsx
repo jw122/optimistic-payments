@@ -1,7 +1,9 @@
 import { checkResultErrors } from "ethers/lib/utils";
 import Dropdown from "react-bootstrap/Dropdown";
+import { getTokenBalance } from "../pages/wallet.js";
+import React from "react";
 
-function TokenSelect() {
+function TokenSelect({provider, accountAddress}) {
   // when an item is clicked in the dropdown, get the selected token
   const handleClick = (event) => {
     console.log("clicked on dropdown!", event.target.textContent);
@@ -19,20 +21,40 @@ function TokenSelect() {
     console.log("results: ", swapQuery);
   };
 
+  const [network, setNetwork] = React.useState("ropsten");
+  const [balances, setBalances] = React.useState({});
+  const currencies = ["dai", "weth", "usdc"]
+
+  React.useEffect(() => {
+    if (Object.keys(balances).length == 0) {
+        // load all token balances
+        const requests = currencies.map(currency => {
+          return getTokenBalance(provider, network, currency, accountAddress)
+        });
+        Promise.all(requests).then(allResults => {
+          const updatedBalances = {};
+          allResults.map((balance, i) => {
+            updatedBalances[currencies[i]] = balance
+          });
+          setBalances(updatedBalances);
+        });
+    }
+  });
+
   return (
     <Dropdown>
       <Dropdown.Toggle variant="success" id="dropdown-basic">
         Select a token to pay
       </Dropdown.Toggle>
 
-      {/* TODO: this dropdown should be based on the tokens actually held by the user */}
       <Dropdown.Menu>
-        <Dropdown.Item onClick={handleClick} value="DAI">
-          DAI
-        </Dropdown.Item>
-        <Dropdown.Item onClick={handleClick}>WETH</Dropdown.Item>
-
-        <Dropdown.Item onClick={handleClick}>OP</Dropdown.Item>
+        {currencies.filter((currency) =>
+          balances && balances[currency] > 0
+        ).map(currency => (
+          <Dropdown.Item onClick={handleClick} value={currency}>
+            {currency} ({balances[currency]})
+          </Dropdown.Item>
+        ))}
       </Dropdown.Menu>
     </Dropdown>
   );

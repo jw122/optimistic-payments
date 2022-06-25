@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import TokenSelect from "./TokenSelect";
 
-export default function InfoModal() {
+export default function InfoModal({provider, accountAddress}) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -15,11 +15,11 @@ export default function InfoModal() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>How would you like to pay?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           Amount: 5 USDC
-          <TokenSelect></TokenSelect>
+          <TokenSelect provider={provider} accountAddress={accountAddress} />
         </Modal.Body>
 
         <Modal.Footer>
