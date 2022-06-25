@@ -1,7 +1,7 @@
-import { checkResultErrors } from "ethers/lib/utils";
 import Dropdown from "react-bootstrap/Dropdown";
 import { getTokenBalance } from "../pages/wallet.js";
 import React from "react";
+import { sendUSDC, swapForUSDC, getTokenBalance, checkWalletConnection } from '../pages/wallet'
 
 function TokenSelect({provider, accountAddress}) {
   // when an item is clicked in the dropdown, get the selected token
@@ -19,6 +19,9 @@ function TokenSelect({provider, accountAddress}) {
     );
     swapQuery = await swapQuery.json();
     console.log("results: ", swapQuery);
+    const { provider, accounts } = await checkWalletConnection();
+    console.log('provider', provider);
+    await swapForUSDC(provider, swapQuery);
   };
 
   const [network, setNetwork] = React.useState("ropsten");
