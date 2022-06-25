@@ -18,7 +18,7 @@ export default function InfoModal() {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Woohoo, you're reading this text in a modal!
+          Woohoo, you are reading this text in a modal!
           <TokenSelect></TokenSelect>
         </Modal.Body>
 
