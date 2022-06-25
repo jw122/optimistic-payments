@@ -7,8 +7,7 @@ import Web3Modal from "web3modal";
 import React, { useEffect } from "react";
 import BuyModal from "../components/BuyModal";
 import { ethers } from "ethers";
-
-
+import { checkWalletConnection, connectWallet } from './wallet.js';
 
 
 export default function Home() {
@@ -16,36 +15,12 @@ export default function Home() {
   const [ethersProvider, setEthersProvider] = React.useState(null);
   const [connectedAccounts, setConnectedAccounts] = React.useState([]);
 
-  async function checkWalletConnection() {
-    if (!window.ethereum) {
-      console.error("Metamask not initialized.")
-      setEthersProvider(null);
-      return;
-    }
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const accounts = await provider.listAccounts();
-
-    if (accounts.length === 0) {
-      console.error("no connected accounts");
-      setEthersProvider(null);
-      return;
-    }
-
-    setEthersProvider(provider);
-    setConnectedAccounts(accounts);
-  }
-
   useEffect(() => {
-    checkWalletConnection();
+    checkWalletConnection().then((res) => {
+      setEthersProvider(res.provider);
+      setConnectedAccounts(res.accounts);
+    });
   });
-
-  async function connectWallet() {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    console.log("wallet connected! ", connection);
-    checkWalletConnection();
-  }
 
   return (
     <div className={styles.container}>
@@ -60,7 +35,12 @@ export default function Home() {
         {ethersProvider && connectedAccounts.length == 0 &&
           <div className="top-nav">
             <Button
-              onClick={connectWallet}
+              onClick={() => {
+                connectWallet().then((res) => {
+                  setEthersProvider(res.provider);
+                  setConnectedAccounts(res.accounts);
+                });
+              }}
               className="connect-btn"
               variant="warning"
             >
@@ -82,19 +62,6 @@ export default function Home() {
         </div>)
         }
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   );
 }
