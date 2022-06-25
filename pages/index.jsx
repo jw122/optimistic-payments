@@ -43,8 +43,6 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Welcome to Optimistic Cafe</h1>
-        <div>{walletAddress && `Connected to wallet: ${walletAddress}`}</div>
-
         {connectedAccounts.length == 0 && (
           <div className="top-nav">
             <Button
