@@ -1,29 +1,29 @@
 import Dropdown from "react-bootstrap/Dropdown";
-import { sendUSDC, swapForUSDC, checkWalletConnection } from "../pages/wallet";
-import { useState } from "react";
+import React from "react";
+import {
+  sendUSDC,
+  swapForUSDC,
+  getTokenBalance,
+  checkWalletConnection,
+} from "../pages/wallet";
 
-function TokenSelect() {
-  const [fetching, setFetching] = useState(false);
-
+function TokenSelect({ provider, accountAddress }) {
   // when an item is clicked in the dropdown, get the selected token
   const handleClick = (event) => {
     console.log("token selected", event.target.textContent);
     const token = event.target.textContent;
-    // TODO: pass in the actual amount
-    setFetching(true);
-    search(token, 100);
+    const selectedPrice = localStorage.getItem("selectedPrice");
+    search(token, selectedPrice);
   };
 
   const search = async (token, amount) => {
-    console.log("searching for quote for " + token + ", amount " + amount);
-
-    // add a spinner
+    console.log("searching for quote for " + token + " , amount " + amount);
     let swapQuery = await fetch(
-      `api/quote?sellToken=${token}&buyToken=USDC&amount=${amount}`
+      `api/quote?sellToken=${token}&buyToken=USDC&buyAmount=${amount}`
     );
-    swapQuery = await swapQuery.json();
-    setFetching(false);
     console.log("results: ", swapQuery);
+    swapQuery = await swapQuery.json();
+    // setFetching(false);
 
     // TODO: extract the exchange rate from results and render in UI
     const { provider, accounts } = await checkWalletConnection();
@@ -31,34 +31,53 @@ function TokenSelect() {
     await swapForUSDC(provider, swapQuery);
   };
 
+  const [network, setNetwork] = React.useState("ropsten");
+  const [balances, setBalances] = React.useState({});
+  const currencies = ["dai", "weth", "usdc"];
+
+  React.useEffect(() => {
+    if (Object.keys(balances).length == 0) {
+      // load all token balances
+      const requests = currencies.map((currency) => {
+        return getTokenBalance(provider, network, currency, accountAddress);
+      });
+      Promise.all(requests).then((allResults) => {
+        const updatedBalances = {};
+        allResults.map((balance, i) => {
+          updatedBalances[currencies[i]] = balance;
+        });
+        setBalances(updatedBalances);
+      });
+    }
+  });
+
+  const hasAnyNonzeroCurrency =
+    balances &&
+    !!Object.keys(balances).find((currency) => {
+      balances[currency] > 0;
+    });
+  const paymentDisabled = !hasAnyNonzeroCurrency;
+
   return (
     <Dropdown>
-      <span>
-        {/* working */}
-        {fetching ? (
-          <p>
-            <img
-              src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"
-              style={{ width: "1em" }}
-            ></img>{" "}
-            Loading...
-          </p>
-        ) : (
-          <></>
-        )}
-      </span>
-      <Dropdown.Toggle variant="success" id="dropdown-basic">
-        Select payment token
+      <Dropdown.Toggle
+        // disabled={paymentDisabled}
+        variant="success"
+        id="dropdown-basic"
+      >
+        Select a token to pay
       </Dropdown.Toggle>
+      {/* {paymentDisabled && <p>You don't have any tokens :(</p>} */}
 
-      {/* TODO: this dropdown should be based on the tokens actually held by the user */}
       <Dropdown.Menu>
-        <Dropdown.Item onClick={handleClick} value="DAI">
-          DAI
-        </Dropdown.Item>
-        <Dropdown.Item onClick={handleClick}>WETH</Dropdown.Item>
-
-        <Dropdown.Item onClick={handleClick}>OP</Dropdown.Item>
+        {currencies
+          .filter((currency) => balances)
+          .map((currency, index) => (
+            <Dropdown.Item onClick={handleClick} value={currency} key={index}>
+              {currency.toUpperCase()}
+              {/* {currency} ({balances[currency]}) */}
+            </Dropdown.Item>
+          ))}
       </Dropdown.Menu>
     </Dropdown>
   );

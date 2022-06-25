@@ -5,6 +5,13 @@ import { ERC20_ABI } from "./erc20.js"
 
 const USDC_CONTRACT_ADDRESS = "0x7F5c764cBc14f9669B88837ca1490cCa17c31607";
 
+const config = {
+  "ropsten": {
+    "usdc": "0xfe724a829fdf12f7012365db98730eee33742ea2",
+    "dai": "0xad6d458402f60fd3bd25163575031acdce07538d",
+    "weth": "0xc778417e063141139fce010982780140aa0cd5ab"
+  }
+}
 
 export async function checkWalletConnection() {
   if (!window.ethereum) {
@@ -19,7 +26,7 @@ export async function checkWalletConnection() {
     console.error("no connected accounts");
     return {providers: null, accounts: []};
   }
-  
+
   return {
     provider: provider,
     accounts: accounts
@@ -27,6 +34,7 @@ export async function checkWalletConnection() {
 }
 
 export async function connectWallet() {
+  console.log("Connect wallet");
   const web3Modal = new Web3Modal({
     network: "testnet",
     cacheProvider: true, // optional
@@ -65,12 +73,15 @@ export async function sendUSDC(provider, to_address, amount) {
 /**
  * Get an ERC20 token balance.
  */
-export async function getTokenBalance(provider, contractAddress, account) {
-  const signer = provider.getSigner()
+export async function getTokenBalance(provider, network, contractName, account) {
+  const signer = provider.getSigner();
+  const contractAddress = config[network][contractName];
   const contract = new ethers.Contract(
     contractAddress,
     ERC20_ABI,
     signer
   );
-  return await contract.balanceOf(account);
+  const bal = await contract.balanceOf(account);
+  return bal.toString();
+
 }
