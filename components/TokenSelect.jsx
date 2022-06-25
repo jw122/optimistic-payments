@@ -1,4 +1,3 @@
-import { checkResultErrors } from "ethers/lib/utils";
 import Dropdown from "react-bootstrap/Dropdown";
 import { sendUSDC, swapForUSDC, checkWalletConnection } from '../pages/wallet'
 
