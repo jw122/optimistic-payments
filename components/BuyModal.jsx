@@ -39,15 +39,16 @@ export default function InfoModal({ provider, accountAddress }) {
   return (
     <>
       <Button className={styles.btnHover} onClick={handleShow}>
-        Checkout
+        Buy
       </Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Make Payment</Modal.Title>
+          <Modal.Title>Pay with any token</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Amount: {selectedPrice} USDC
+          <b>Price: {selectedPrice} USDC</b>
+          <p>No USDC? No problem. Swap from any token: </p>
           {/* <TokenSelect provider={provider} accountAddress={accountAddress} /> */}
           <div className="Uniswap">
             <SwapWidget
@@ -58,7 +59,9 @@ export default function InfoModal({ provider, accountAddress }) {
             />
           </div>
           <div>
-            <Button onClick={payMerchant}>Pay Merchant</Button>
+            <Button onClick={payMerchant} className={styles.btnHoverCheckout}>
+              Checkout
+            </Button>
           </div>
         </Modal.Body>
 
