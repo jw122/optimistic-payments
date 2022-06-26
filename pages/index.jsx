@@ -30,7 +30,7 @@ export default function Home() {
 
   console.log("Render: Home");
 
-  const coffeePrice = 50;
+  const coffeePrice = 0.5;
 
   return (
     <div className={styles.container}>
@@ -41,7 +41,9 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to Optimistic Cafe</h1>
+        <h1 className={styles.titleGradient}>OPTIMISTIC CAFÉ</h1>
+        <img href="https://storage.googleapis.com/isometriclove.appspot.com/tea_S_1k.gif" />
+
         {connectedAccounts.length == 0 && (
           <div className="top-nav">
             <Button
@@ -61,17 +63,75 @@ export default function Home() {
 
         {ethersProvider && connectedAccounts > 0 && (
           <div className={styles.grid}>
+            {/* TODO: generate in a loop with randomized prices */}
             <a
               className={styles.card}
               onClick={() => {
-                localStorage.setItem("selectedPrice", coffeePrice);
+                localStorage.setItem("selectedPrice", 2.4);
+              }}
+            >
+              <img
+                src="https://cdn2.iconfinder.com/data/icons/coffee-19/451/affogato-1024.png"
+                style={{ width: "50px" }}
+              ></img>
+              <h5>Chad Macchiato</h5>
+              <p>2.4 USDC</p>
+
+              <BuyModal
+                provider={ethersProvider}
+                accountAddress={connectedAccounts[0]}
+              />
+            </a>
+
+            <a
+              className={styles.card}
+              onClick={() => {
+                localStorage.setItem("selectedPrice", 0.5);
               }}
             >
               <img
                 src="https://cdn2.iconfinder.com/data/icons/coffee-19/442/tea-1024.png"
                 style={{ width: "50px" }}
               ></img>
-              <h4>{coffeePrice} USDC</h4>
+              <h5>Ape Espresso</h5>
+              <p>{coffeePrice} USDC</p>
+
+              <BuyModal
+                provider={ethersProvider}
+                accountAddress={connectedAccounts[0]}
+              />
+            </a>
+            <a
+              className={styles.card}
+              onClick={() => {
+                localStorage.setItem("selectedPrice", 4.6);
+              }}
+            >
+              <img
+                src="https://cdn2.iconfinder.com/data/icons/coffee-19/448/coffee_cup-1024.png"
+                style={{ width: "50px" }}
+              ></img>
+              <h5>Whale Latte</h5>
+
+              <p>4.60 USDC</p>
+
+              <BuyModal
+                provider={ethersProvider}
+                accountAddress={connectedAccounts[0]}
+              />
+            </a>
+            <a
+              className={styles.card}
+              onClick={() => {
+                localStorage.setItem("selectedPrice", 7.3);
+              }}
+            >
+              <img
+                src="https://cdn2.iconfinder.com/data/icons/coffee-19/443/Cappuccino-1024.png"
+                style={{ width: "50px" }}
+              ></img>
+              <h5>Degen Cappuccino</h5>
+              <p>7.30 USDC</p>
 
               <BuyModal
                 provider={ethersProvider}

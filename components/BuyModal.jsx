@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import styles from "../styles/Home.module.css";
 import TokenSelect from "./TokenSelect";
 import { SwapWidget, Theme } from "@uniswap/widgets";
 import "@uniswap/widgets/fonts.css";
@@ -37,7 +38,7 @@ export default function InfoModal({ provider, accountAddress }) {
 
   return (
     <>
-      <Button className="nextButton" onClick={handleShow}>
+      <Button className={styles.btnHover} onClick={handleShow}>
         Checkout
       </Button>
 
