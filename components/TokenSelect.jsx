@@ -60,13 +60,13 @@ function TokenSelect({ provider, accountAddress }) {
 
   return (
     <Dropdown>
-      <Dropdown.Toggle
+      {/* <Dropdown.Toggle
         // disabled={paymentDisabled}
         variant="success"
         id="dropdown-basic"
       >
         Select a token to pay
-      </Dropdown.Toggle>
+      </Dropdown.Toggle> */}
       {/* {paymentDisabled && <p>You don't have any tokens :(</p>} */}
 
       <Dropdown.Menu>
